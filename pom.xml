@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
-	<artifactId>JuliusCaeesarChatbot</artifactId>
+	<artifactId>JuliusCaesarChatbot</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>JuliusCaeesarChatbot</name>
 	<description>Demo project for Spring Boot</description>
@@ -49,7 +49,18 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-	</dependencies>
+
+        <dependency>
+            <groupId>jakarta.persistence</groupId>
+            <artifactId>jakarta.persistence-api</artifactId>
+            <version>3.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20240303</version>
+        </dependency>
+    </dependencies>
 
 	<build>
 		<plugins>
