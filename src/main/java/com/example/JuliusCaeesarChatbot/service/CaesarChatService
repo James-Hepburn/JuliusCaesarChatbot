@@ -1,0 +1,56 @@
+package com.example.JuliusCaesarChatbot.service;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.http.*;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+@Service
+public class CaesarChatService {
+    @Value("${OPENAI_API_KEY}")
+    private String API_KEY;
+    private static final String API_URL = "https://api.openai.com/v1/chat/completions";
+
+    public String getCaesarResponse (String message) {
+        try {
+            JSONObject systemMessage = new JSONObject ();
+            systemMessage.put ("role", "system");
+            systemMessage.put ("content", "You are Julius Caesar, the Roman general and statesman. You know Roman history, politics, and battles, but nothing about modern technology. Speak formally and in a slightly archaic style.");
+
+            JSONObject userMessage = new JSONObject ();
+            userMessage.put ("role", "user");
+            userMessage.put ("content", userMessage);
+
+            JSONArray messages = new JSONArray ();
+            messages.put (systemMessage);
+            messages.put (userMessage);
+
+            JSONObject requestBody = new JSONObject ();
+            requestBody.put ("model", "gpt-4o-mini");
+            requestBody.put ("messages", messages);
+
+            RestTemplate restTemplate = new RestTemplate ();
+            HttpHeaders headers = new HttpHeaders ();
+            headers.setContentType (MediaType.APPLICATION_JSON);
+            headers.setBearerAuth (this.API_KEY);
+
+            HttpEntity <String> entity = new HttpEntity <>(requestBody.toString (), headers);
+            ResponseEntity <String> response = restTemplate.postForEntity (this.API_URL, entity, String.class);
+
+            JSONObject jsonResponse = new JSONObject (response.getBody ());
+            String caesarReply = jsonResponse
+                    .getJSONArray ("choices")
+                    .getJSONObject (0)
+                    .getJSONObject ("message")
+                    .getString ("content");
+
+            return caesarReply.trim ();
+
+        } catch (Exception e) {
+            e.printStackTrace ();
+            return "I am troubled, citizen. Speak again more clearly.";
+        }
+    }
+}
